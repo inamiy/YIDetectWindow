@@ -1,0 +1,278 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1F84828A1493221F0029D1F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F8482891493221F0029D1F3 /* UIKit.framework */; };
+		1F84828C1493221F0029D1F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F84828B1493221F0029D1F3 /* Foundation.framework */; };
+		1F84828E1493221F0029D1F3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F84828D1493221F0029D1F3 /* CoreGraphics.framework */; };
+		1F8482941493221F0029D1F3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F8482921493221F0029D1F3 /* InfoPlist.strings */; };
+		1F8482961493221F0029D1F3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8482951493221F0029D1F3 /* main.m */; };
+		1F84829A1493221F0029D1F3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8482991493221F0029D1F3 /* AppDelegate.m */; };
+		1F8482A31493223E0029D1F3 /* YIDetectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8482A21493223E0029D1F3 /* YIDetectWindow.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1F8482851493221F0029D1F3 /* YIDetectWindowDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YIDetectWindowDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F8482891493221F0029D1F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1F84828B1493221F0029D1F3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1F84828D1493221F0029D1F3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1F8482911493221F0029D1F3 /* YIDetectWindowDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YIDetectWindowDemo-Info.plist"; sourceTree = "<group>"; };
+		1F8482931493221F0029D1F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F8482951493221F0029D1F3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1F8482971493221F0029D1F3 /* YIDetectWindowDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YIDetectWindowDemo-Prefix.pch"; sourceTree = "<group>"; };
+		1F8482981493221F0029D1F3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1F8482991493221F0029D1F3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1F8482A11493223E0029D1F3 /* YIDetectWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YIDetectWindow.h; sourceTree = "<group>"; };
+		1F8482A21493223E0029D1F3 /* YIDetectWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YIDetectWindow.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1F8482821493221F0029D1F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F84828A1493221F0029D1F3 /* UIKit.framework in Frameworks */,
+				1F84828C1493221F0029D1F3 /* Foundation.framework in Frameworks */,
+				1F84828E1493221F0029D1F3 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F84827A1493221F0029D1F3 = {
+			isa = PBXGroup;
+			children = (
+				1F8482A01493223E0029D1F3 /* YIDetectWindow */,
+				1F84828F1493221F0029D1F3 /* YIDetectWindowDemo */,
+				1F8482881493221F0029D1F3 /* Frameworks */,
+				1F8482861493221F0029D1F3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1F8482861493221F0029D1F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1F8482851493221F0029D1F3 /* YIDetectWindowDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1F8482881493221F0029D1F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1F8482891493221F0029D1F3 /* UIKit.framework */,
+				1F84828B1493221F0029D1F3 /* Foundation.framework */,
+				1F84828D1493221F0029D1F3 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1F84828F1493221F0029D1F3 /* YIDetectWindowDemo */ = {
+			isa = PBXGroup;
+			children = (
+				1F8482981493221F0029D1F3 /* AppDelegate.h */,
+				1F8482991493221F0029D1F3 /* AppDelegate.m */,
+				1F8482901493221F0029D1F3 /* Supporting Files */,
+			);
+			path = YIDetectWindowDemo;
+			sourceTree = "<group>";
+		};
+		1F8482901493221F0029D1F3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1F8482911493221F0029D1F3 /* YIDetectWindowDemo-Info.plist */,
+				1F8482921493221F0029D1F3 /* InfoPlist.strings */,
+				1F8482951493221F0029D1F3 /* main.m */,
+				1F8482971493221F0029D1F3 /* YIDetectWindowDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1F8482A01493223E0029D1F3 /* YIDetectWindow */ = {
+			isa = PBXGroup;
+			children = (
+				1F8482A11493223E0029D1F3 /* YIDetectWindow.h */,
+				1F8482A21493223E0029D1F3 /* YIDetectWindow.m */,
+			);
+			path = YIDetectWindow;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1F8482841493221F0029D1F3 /* YIDetectWindowDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F84829D1493221F0029D1F3 /* Build configuration list for PBXNativeTarget "YIDetectWindowDemo" */;
+			buildPhases = (
+				1F8482811493221F0029D1F3 /* Sources */,
+				1F8482821493221F0029D1F3 /* Frameworks */,
+				1F8482831493221F0029D1F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YIDetectWindowDemo;
+			productName = YIDetectWindowDemo;
+			productReference = 1F8482851493221F0029D1F3 /* YIDetectWindowDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1F84827C1493221F0029D1F3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Yasuhiro Inami";
+			};
+			buildConfigurationList = 1F84827F1493221F0029D1F3 /* Build configuration list for PBXProject "YIDetectWindowDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1F84827A1493221F0029D1F3;
+			productRefGroup = 1F8482861493221F0029D1F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1F8482841493221F0029D1F3 /* YIDetectWindowDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1F8482831493221F0029D1F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F8482941493221F0029D1F3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1F8482811493221F0029D1F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F8482961493221F0029D1F3 /* main.m in Sources */,
+				1F84829A1493221F0029D1F3 /* AppDelegate.m in Sources */,
+				1F8482A31493223E0029D1F3 /* YIDetectWindow.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1F8482921493221F0029D1F3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F8482931493221F0029D1F3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1F84829B1493221F0029D1F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		1F84829C1493221F0029D1F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1F84829E1493221F0029D1F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YIDetectWindowDemo/YIDetectWindowDemo-Prefix.pch";
+				INFOPLIST_FILE = "YIDetectWindowDemo/YIDetectWindowDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		1F84829F1493221F0029D1F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YIDetectWindowDemo/YIDetectWindowDemo-Prefix.pch";
+				INFOPLIST_FILE = "YIDetectWindowDemo/YIDetectWindowDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1F84827F1493221F0029D1F3 /* Build configuration list for PBXProject "YIDetectWindowDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F84829B1493221F0029D1F3 /* Debug */,
+				1F84829C1493221F0029D1F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1F84829D1493221F0029D1F3 /* Build configuration list for PBXNativeTarget "YIDetectWindowDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F84829E1493221F0029D1F3 /* Debug */,
+				1F84829F1493221F0029D1F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1F84827C1493221F0029D1F3 /* Project object */;
+}
