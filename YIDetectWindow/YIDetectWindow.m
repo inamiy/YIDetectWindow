@@ -10,14 +10,21 @@
 
 #define IS_ARC (__has_feature(objc_arc))
 
+#define LONG_PRESS_DELAY    0.5
+#define ALLOWABLE_MOVEMENT  10
+
+#define DISTANCE(a,b) sqrtf((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y))
+
 NSString* const YIDetectWindowDidReceiveShakeNotification = @"YIDetectWindowDidReceiveShakeNotification";
 NSString* const YIDetectWindowDidReceiveStatusBarTapNotification = @"YIDetectWindowDidReceiveStatusBarTapNotification";
+NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindowDidReceiveLongPressNotification";
 
 
 @implementation YIDetectWindow
 
 @synthesize shakeEnabled = _shakeEnabled;
 @synthesize statusBarTapEnabled = _statusBarTapEnabled;
+@synthesize longPressEnabled = _longPressEnabled;
 
 - (void)_setup
 {
@@ -37,6 +44,7 @@ NSString* const YIDetectWindowDidReceiveStatusBarTapNotification = @"YIDetectWin
     
     self.shakeEnabled = NO;
     self.statusBarTapEnabled = NO;
+    self.longPressEnabled = NO;
 }
 
 - (id)init
@@ -88,12 +96,62 @@ NSString* const YIDetectWindowDidReceiveStatusBarTapNotification = @"YIDetectWin
 
 #pragma mark -
 
+#pragma mark UIWindow
+
+// override
+- (void)sendEvent:(UIEvent *)event
+{
+    [super sendEvent:event];
+    
+    if (!self.longPressEnabled) return;
+    
+    NSSet *touches = [event touchesForWindow:self];
+    
+    if ([touches count] == 1) {
+        UITouch *touch = [touches anyObject];
+        
+        if ([touch phase] == UITouchPhaseBegan) {
+            _touchStartLocation = [touch locationInView:self];
+            
+            [self performSelector:@selector(didLongPress:) 
+                       withObject:[NSValue valueWithCGPoint:_touchStartLocation]
+                       afterDelay:LONG_PRESS_DELAY];
+        }
+        else if ([touch phase] == UITouchPhaseMoved) {
+            if (DISTANCE(_touchStartLocation, [touch locationInView:self]) > ALLOWABLE_MOVEMENT) {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        }
+    } 
+    else {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    }
+}
+
+- (void)didLongPress:(NSValue*)pointValue
+{
+    if (self.longPressEnabled) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveLongPressNotification object:pointValue];
+    }
+}
+
+#pragma mark -
+
 #pragma mark UIResponder
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event { 
-	if (_shakeEnabled && event.type == UIEventTypeMotion && motion == UIEventSubtypeMotionShake) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveShakeNotification object:self];
-	}  
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{ 
+	if (self.shakeEnabled) {
+        if (event.type == UIEventTypeMotion && motion == UIEventSubtypeMotionShake) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveShakeNotification object:self];
+        } 
+    }
 }
 
 #pragma mark -
@@ -102,7 +160,9 @@ NSString* const YIDetectWindowDidReceiveStatusBarTapNotification = @"YIDetectWin
 
 - (void)handleStatusBarTap:(UITapGestureRecognizer*)gesture
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveStatusBarTapNotification object:self];
+    if (self.statusBarTapEnabled) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveStatusBarTapNotification object:self];
+    }
 }
 
 @end

@@ -19,10 +19,12 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveStatusBarTapNotification:) name:YIDetectWindowDidReceiveStatusBarTapNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveShakeNotification:) name:YIDetectWindowDidReceiveShakeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLongPressNotification:) name:YIDetectWindowDidReceiveLongPressNotification object:nil];
     
     YIDetectWindow* window = [[YIDetectWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     window.statusBarTapEnabled = YES;
     window.shakeEnabled = YES;
+    window.longPressEnabled = YES;
     
     self.window = window;
     // Override point for customization after application launch.
@@ -82,6 +84,12 @@
 - (void)didReceiveShakeNotification:(NSNotification*)notification
 {
     NSLog(@"shake!");
+}
+
+- (void)didReceiveLongPressNotification:(NSNotification*)notification
+{
+    CGPoint point = [(NSValue*)notification.object CGPointValue];
+    NSLog(@"long press at (%f, %f)!",point.x,point.y);
 }
 
 @end

@@ -10,16 +10,18 @@
 
 extern NSString* const YIDetectWindowDidReceiveShakeNotification;
 extern NSString* const YIDetectWindowDidReceiveStatusBarTapNotification;
+extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
 
-@interface YIDetectWindow : UIWindow {
+@interface YIDetectWindow : UIWindow 
+{
     UIWindow*   _statusBarWindow;
     
-    BOOL        _shakeEnabled;
-    BOOL        _statusBarTapEnabled;
+    CGPoint     _touchStartLocation;
 }
 
 @property (nonatomic, assign) BOOL shakeEnabled;
 @property (nonatomic, assign) BOOL statusBarTapEnabled;
+@property (nonatomic, assign) BOOL longPressEnabled;
 
 @end
