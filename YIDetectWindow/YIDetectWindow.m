@@ -152,6 +152,14 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
             [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveShakeNotification object:self];
         } 
     }
+    else {
+        //
+        // NOTE:
+        // By calling super-class method, default shaking method
+        // e.g. UITextView's undo/redo will be safely performed.
+        //
+        [super motionEnded:motion withEvent:event];
+    }
 }
 
 #pragma mark -
