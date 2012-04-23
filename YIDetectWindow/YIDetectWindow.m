@@ -17,6 +17,8 @@
 
 NSString* const YIDetectWindowDidReceiveShakeNotification = @"YIDetectWindowDidReceiveShakeNotification";
 NSString* const YIDetectWindowDidReceiveStatusBarTapNotification = @"YIDetectWindowDidReceiveStatusBarTapNotification";
+NSString* const YIDetectWindowDidReceiveTouchBeganNotification = @"YIDetectWindowDidReceiveTouchBeganNotification";
+NSString* const YIDetectWindowDidReceiveTouchEndedNotification = @"YIDetectWindowDidReceiveTouchEndedNotification";
 NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindowDidReceiveLongPressNotification";
 
 
@@ -24,6 +26,7 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
 
 @synthesize shakeEnabled = _shakeEnabled;
 @synthesize statusBarTapEnabled = _statusBarTapEnabled;
+@synthesize singleTouchEnabled = _singleTouchEnabled;
 @synthesize longPressEnabled = _longPressEnabled;
 
 - (void)_setup
@@ -44,6 +47,7 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
     
     self.shakeEnabled = NO;
     self.statusBarTapEnabled = NO;
+    self.singleTouchEnabled = NO;
     self.longPressEnabled = NO;
 }
 
@@ -103,7 +107,7 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
 {
     [super sendEvent:event];
     
-    if (!self.longPressEnabled) return;
+    if (!self.singleTouchEnabled && !self.longPressEnabled) return;
     
     NSSet *touches = [event touchesForWindow:self];
     
@@ -113,16 +117,27 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
         if ([touch phase] == UITouchPhaseBegan) {
             _touchStartLocation = [touch locationInView:self];
             
+            if (self.singleTouchEnabled) {
+                [self didTouchBegan:[NSValue valueWithCGPoint:_touchStartLocation]];
+            }
+            
             [self performSelector:@selector(didLongPress:) 
                        withObject:[NSValue valueWithCGPoint:_touchStartLocation]
                        afterDelay:LONG_PRESS_DELAY];
         }
         else if ([touch phase] == UITouchPhaseMoved) {
-            if (DISTANCE(_touchStartLocation, [touch locationInView:self]) > ALLOWABLE_MOVEMENT) {
+            if (self.longPressEnabled && DISTANCE(_touchStartLocation, [touch locationInView:self]) > ALLOWABLE_MOVEMENT) {
                 [NSObject cancelPreviousPerformRequestsWithTarget:self];
             }
             else {
                 return;
+            }
+        }
+        else if ([touch phase] == UITouchPhaseEnded) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            
+            if (self.singleTouchEnabled) {
+                [self didTouchEnded:[NSValue valueWithCGPoint:[touch locationInView:self]]];
             }
         }
         else {
@@ -131,6 +146,20 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
     } 
     else {
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    }
+}
+
+- (void)didTouchBegan:(NSValue*)pointValue
+{
+    if (self.singleTouchEnabled) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchBeganNotification object:pointValue];
+    }
+}
+
+- (void)didTouchEnded:(NSValue*)pointValue
+{
+    if (self.singleTouchEnabled) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchEndedNotification object:pointValue];
     }
 }
 

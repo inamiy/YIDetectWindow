@@ -19,11 +19,14 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveStatusBarTapNotification:) name:YIDetectWindowDidReceiveStatusBarTapNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveShakeNotification:) name:YIDetectWindowDidReceiveShakeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchBeganNotification:) name:YIDetectWindowDidReceiveTouchBeganNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchEndedNotification:) name:YIDetectWindowDidReceiveTouchEndedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLongPressNotification:) name:YIDetectWindowDidReceiveLongPressNotification object:nil];
     
     YIDetectWindow* window = [[YIDetectWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     window.statusBarTapEnabled = YES;
     window.shakeEnabled = YES;
+    window.singleTouchEnabled = YES;    // single touchBegan/Ended
     window.longPressEnabled = YES;
     
     self.window = window;
@@ -84,6 +87,18 @@
 - (void)didReceiveShakeNotification:(NSNotification*)notification
 {
     NSLog(@"shake!");
+}
+
+- (void)didReceiveTouchBeganNotification:(NSNotification*)notification
+{
+    CGPoint point = [(NSValue*)notification.object CGPointValue];
+    NSLog(@"touch began at (%f, %f)!",point.x,point.y);
+}
+
+- (void)didReceiveTouchEndedNotification:(NSNotification*)notification
+{
+    CGPoint point = [(NSValue*)notification.object CGPointValue];
+    NSLog(@"touch ended at (%f, %f)!",point.x,point.y);
 }
 
 - (void)didReceiveLongPressNotification:(NSNotification*)notification

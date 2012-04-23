@@ -10,6 +10,8 @@
 
 extern NSString* const YIDetectWindowDidReceiveShakeNotification;
 extern NSString* const YIDetectWindowDidReceiveStatusBarTapNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchBeganNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchEndedNotification;
 extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
 
@@ -22,6 +24,7 @@ extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
 @property (nonatomic, assign) BOOL shakeEnabled;
 @property (nonatomic, assign) BOOL statusBarTapEnabled;
-@property (nonatomic, assign) BOOL longPressEnabled;
+@property (nonatomic, assign) BOOL singleTouchEnabled;  // single touchBegan/touchEnded
+@property (nonatomic, assign) BOOL longPressEnabled;    // single longPress
 
 @end
