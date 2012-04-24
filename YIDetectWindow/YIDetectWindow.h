@@ -14,6 +14,9 @@ extern NSString* const YIDetectWindowDidReceiveTouchBeganNotification;
 extern NSString* const YIDetectWindowDidReceiveTouchEndedNotification;
 extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
+extern NSString* const YIDetectWindowTouchLocationUserInfoKey;
+extern NSString* const YIDetectWindowTouchViewUserInfoKey;
+
 
 @interface YIDetectWindow : UIWindow 
 {

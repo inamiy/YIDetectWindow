@@ -21,6 +21,9 @@ NSString* const YIDetectWindowDidReceiveTouchBeganNotification = @"YIDetectWindo
 NSString* const YIDetectWindowDidReceiveTouchEndedNotification = @"YIDetectWindowDidReceiveTouchEndedNotification";
 NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindowDidReceiveLongPressNotification";
 
+NSString* const YIDetectWindowTouchLocationUserInfoKey = @"YIDetectWindowTouchLocationUserInfoKey";
+NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUserInfoKey";
+
 
 @implementation YIDetectWindow
 
@@ -118,11 +121,11 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
             _touchStartLocation = [touch locationInView:self];
             
             if (self.singleTouchEnabled) {
-                [self didTouchBegan:[NSValue valueWithCGPoint:_touchStartLocation]];
+                [self didTouchBegan:touch];
             }
             
             [self performSelector:@selector(didLongPress:) 
-                       withObject:[NSValue valueWithCGPoint:_touchStartLocation]
+                       withObject:touch
                        afterDelay:LONG_PRESS_DELAY];
         }
         else if ([touch phase] == UITouchPhaseMoved) {
@@ -137,7 +140,7 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             
             if (self.singleTouchEnabled) {
-                [self didTouchEnded:[NSValue valueWithCGPoint:[touch locationInView:self]]];
+                [self didTouchEnded:touch];
             }
         }
         else {
@@ -149,24 +152,39 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
     }
 }
 
-- (void)didTouchBegan:(NSValue*)pointValue
+- (void)didTouchBegan:(UITouch*)touch
 {
     if (self.singleTouchEnabled) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchBeganNotification object:pointValue];
+        NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  pointValue, YIDetectWindowTouchLocationUserInfoKey, 
+                                  touch.view, YIDetectWindowTouchViewUserInfoKey, 
+                                  nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchBeganNotification object:self userInfo:userInfo];
     }
 }
 
-- (void)didTouchEnded:(NSValue*)pointValue
+- (void)didTouchEnded:(UITouch*)touch
 {
     if (self.singleTouchEnabled) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchEndedNotification object:pointValue];
+        NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  pointValue, YIDetectWindowTouchLocationUserInfoKey, 
+                                  touch.view, YIDetectWindowTouchViewUserInfoKey, 
+                                  nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveTouchEndedNotification object:self userInfo:userInfo];
     }
 }
 
-- (void)didLongPress:(NSValue*)pointValue
+- (void)didLongPress:(UITouch*)touch
 {
     if (self.longPressEnabled) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveLongPressNotification object:pointValue];
+        NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  pointValue, YIDetectWindowTouchLocationUserInfoKey, 
+                                  touch.view, YIDetectWindowTouchViewUserInfoKey, 
+                                  nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveLongPressNotification object:self userInfo:userInfo];
     }
 }
 

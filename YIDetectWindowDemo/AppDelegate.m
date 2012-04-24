@@ -33,6 +33,11 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    UIView* testView = [[UIView alloc] initWithFrame:CGRectMake(20, 40, 100, 100)];
+    testView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    [self.window addSubview:testView];
+    
     return YES;
 }
 
@@ -91,20 +96,29 @@
 
 - (void)didReceiveTouchBeganNotification:(NSNotification*)notification
 {
-    CGPoint point = [(NSValue*)notification.object CGPointValue];
-    NSLog(@"touch began at (%f, %f)!",point.x,point.y);
+    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
+    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
+    CGPoint point = [pointValue CGPointValue];
+    
+    NSLog(@"touch began at %@ (%f, %f)!",[view class],point.x,point.y);
 }
 
 - (void)didReceiveTouchEndedNotification:(NSNotification*)notification
 {
-    CGPoint point = [(NSValue*)notification.object CGPointValue];
-    NSLog(@"touch ended at (%f, %f)!",point.x,point.y);
+    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
+    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
+    CGPoint point = [pointValue CGPointValue];
+    
+    NSLog(@"touch ended at %@ (%f, %f)!",[view class],point.x,point.y);
 }
 
 - (void)didReceiveLongPressNotification:(NSNotification*)notification
 {
-    CGPoint point = [(NSValue*)notification.object CGPointValue];
-    NSLog(@"long press at (%f, %f)!",point.x,point.y);
+    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
+    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
+    CGPoint point = [pointValue CGPointValue];
+    
+    NSLog(@"long press at %@ (%f, %f)!",[view class],point.x,point.y);
 }
 
 @end
