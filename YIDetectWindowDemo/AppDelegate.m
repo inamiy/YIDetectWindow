@@ -24,10 +24,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLongPressNotification:) name:YIDetectWindowDidReceiveLongPressNotification object:nil];
     
     YIDetectWindow* window = [[YIDetectWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    window.statusBarTapEnabled = YES;
-    window.shakeEnabled = YES;
-    window.singleTouchEnabled = YES;    // single touchBegan/Ended
-    window.longPressEnabled = YES;
+    window.detectsShake = YES;
+    window.detectsStatusBarTap = YES;
+    window.detectsTouchPhases = YES;    // touchBegan/Ended
+    window.detectsLongPress = YES;
     
     self.window = window;
     // Override point for customization after application launch.

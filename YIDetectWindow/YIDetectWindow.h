@@ -14,20 +14,16 @@ extern NSString* const YIDetectWindowDidReceiveTouchBeganNotification;
 extern NSString* const YIDetectWindowDidReceiveTouchEndedNotification;
 extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
+extern NSString* const YIDetectWindowTouchUserInfoKey;
 extern NSString* const YIDetectWindowTouchLocationUserInfoKey;
 extern NSString* const YIDetectWindowTouchViewUserInfoKey;
 
 
-@interface YIDetectWindow : UIWindow 
-{
-    UIWindow*   _statusBarWindow;
-    
-    CGPoint     _touchStartLocation;
-}
+@interface YIDetectWindow : UIWindow
 
-@property (nonatomic, assign) BOOL shakeEnabled;
-@property (nonatomic, assign) BOOL statusBarTapEnabled;
-@property (nonatomic, assign) BOOL singleTouchEnabled;  // single touchBegan/touchEnded
-@property (nonatomic, assign) BOOL longPressEnabled;    // single longPress
+@property (nonatomic, assign) BOOL detectsShake;
+@property (nonatomic, assign) BOOL detectsStatusBarTap;
+@property (nonatomic, assign) BOOL detectsTouchPhases;  // for all touches, dispatching separately
+@property (nonatomic, assign) BOOL detectsLongPress;    // for only single touch
 
 @end

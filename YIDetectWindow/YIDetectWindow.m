@@ -21,16 +21,22 @@ NSString* const YIDetectWindowDidReceiveTouchBeganNotification = @"YIDetectWindo
 NSString* const YIDetectWindowDidReceiveTouchEndedNotification = @"YIDetectWindowDidReceiveTouchEndedNotification";
 NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindowDidReceiveLongPressNotification";
 
+NSString* const YIDetectWindowTouchUserInfoKey = @"YIDetectWindowTouchUserInfoKey";
 NSString* const YIDetectWindowTouchLocationUserInfoKey = @"YIDetectWindowTouchLocationUserInfoKey";
 NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUserInfoKey";
 
 
-@implementation YIDetectWindow
+@implementation YIDetectWindow 
+{
+    UIWindow*   _statusBarWindow;
+    
+    CGPoint     _longPressStartLocation;
+}
 
-@synthesize shakeEnabled = _shakeEnabled;
-@synthesize statusBarTapEnabled = _statusBarTapEnabled;
-@synthesize singleTouchEnabled = _singleTouchEnabled;
-@synthesize longPressEnabled = _longPressEnabled;
+@synthesize detectsShake = _detectsShake;
+@synthesize detectsStatusBarTap = _detectsStatusBarTap;
+@synthesize detectsTouchPhases = _detectsTouchPhases;
+@synthesize detectsLongPress = _detectsLongPress;
 
 - (void)_setup
 {
@@ -48,10 +54,10 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
     [gesture release];
 #endif
     
-    self.shakeEnabled = NO;
-    self.statusBarTapEnabled = NO;
-    self.singleTouchEnabled = NO;
-    self.longPressEnabled = NO;
+    self.detectsShake = NO;
+    self.detectsStatusBarTap = NO;
+    self.detectsTouchPhases = NO;
+    self.detectsLongPress = NO;
 }
 
 - (id)init
@@ -95,10 +101,10 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 
 #pragma mark Accessors
 
-- (void)setStatusBarTapEnabled:(BOOL)statusBarTapEnabled
+- (void)setDetectsStatusBarTap:(BOOL)detectsStatusBarTap
 {
-    _statusBarTapEnabled = statusBarTapEnabled;
-    _statusBarWindow.hidden = !statusBarTapEnabled;
+    _detectsStatusBarTap = detectsStatusBarTap;
+    _statusBarWindow.hidden = !detectsStatusBarTap;
 }
 
 #pragma mark -
@@ -110,53 +116,53 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 {
     [super sendEvent:event];
     
-    if (!self.singleTouchEnabled && !self.longPressEnabled) return;
-    
     NSSet *touches = [event touchesForWindow:self];
     
-    if ([touches count] == 1) {
-        UITouch *touch = [touches anyObject];
-        
-        if ([touch phase] == UITouchPhaseBegan) {
-            _touchStartLocation = [touch locationInView:self];
-            
-            if (self.singleTouchEnabled) {
+    // touchBegan/Ended (for all touches, dispatching separately)
+    if (self.detectsTouchPhases) {
+        for (UITouch* touch in touches) {
+            if ([touch phase] == UITouchPhaseBegan) {
                 [self didTouchBegan:touch];
             }
-            
-            [self performSelector:@selector(didLongPress:) 
-                       withObject:touch
-                       afterDelay:LONG_PRESS_DELAY];
-        }
-        else if ([touch phase] == UITouchPhaseMoved) {
-            if (self.longPressEnabled && DISTANCE(_touchStartLocation, [touch locationInView:self]) > ALLOWABLE_MOVEMENT) {
-                [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            }
-            else {
-                return;
-            }
-        }
-        else if ([touch phase] == UITouchPhaseEnded) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            
-            if (self.singleTouchEnabled) {
+            else if ([touch phase] == UITouchPhaseEnded) {
                 [self didTouchEnded:touch];
             }
         }
+    }
+    
+    // longPress (for only single touch)
+    if (self.detectsLongPress) {
+        if ([touches count] == 1) {
+            UITouch *touch = [touches anyObject];
+            
+            if ([touch phase] == UITouchPhaseBegan) {
+                _longPressStartLocation = [touch locationInView:self];
+                
+                [self performSelector:@selector(didLongPress:) 
+                           withObject:touch
+                           afterDelay:LONG_PRESS_DELAY];
+            }
+            else if ([touch phase] == UITouchPhaseMoved) {
+                if (DISTANCE(_longPressStartLocation, [touch locationInView:self]) > ALLOWABLE_MOVEMENT) {
+                    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+                }
+            }
+            else {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            }
+        } 
         else {
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
         }
-    } 
-    else {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
     }
 }
 
 - (void)didTouchBegan:(UITouch*)touch
 {
-    if (self.singleTouchEnabled) {
+    if (self.detectsTouchPhases) {
         NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  touch, YIDetectWindowTouchUserInfoKey,
                                   pointValue, YIDetectWindowTouchLocationUserInfoKey, 
                                   touch.view, YIDetectWindowTouchViewUserInfoKey, 
                                   nil];
@@ -166,9 +172,10 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 
 - (void)didTouchEnded:(UITouch*)touch
 {
-    if (self.singleTouchEnabled) {
+    if (self.detectsTouchPhases) {
         NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  touch, YIDetectWindowTouchUserInfoKey,
                                   pointValue, YIDetectWindowTouchLocationUserInfoKey, 
                                   touch.view, YIDetectWindowTouchViewUserInfoKey, 
                                   nil];
@@ -178,9 +185,10 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 
 - (void)didLongPress:(UITouch*)touch
 {
-    if (self.longPressEnabled) {
+    if (self.detectsLongPress) {
         NSValue* pointValue = [NSValue valueWithCGPoint:[touch locationInView:self]];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  touch, YIDetectWindowTouchUserInfoKey,
                                   pointValue, YIDetectWindowTouchLocationUserInfoKey, 
                                   touch.view, YIDetectWindowTouchViewUserInfoKey, 
                                   nil];
@@ -194,7 +202,7 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 { 
-	if (self.shakeEnabled) {
+	if (self.detectsShake) {
         if (event.type == UIEventTypeMotion && motion == UIEventSubtypeMotionShake) {
             [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveShakeNotification object:self];
         } 
@@ -215,7 +223,7 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 
 - (void)handleStatusBarTap:(UITapGestureRecognizer*)gesture
 {
-    if (self.statusBarTapEnabled) {
+    if (self.detectsStatusBarTap) {
         [[NSNotificationCenter defaultCenter] postNotificationName:YIDetectWindowDidReceiveStatusBarTapNotification object:self];
     }
 }
