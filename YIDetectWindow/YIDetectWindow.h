@@ -26,4 +26,6 @@ extern NSString* const YIDetectWindowTouchViewUserInfoKey;
 @property (nonatomic, assign) BOOL detectsTouchPhases;  // for all touches, dispatching separately
 @property (nonatomic, assign) BOOL detectsLongPress;    // for only single touch
 
++ (YIDetectWindow*)detectWindow;
+
 @end

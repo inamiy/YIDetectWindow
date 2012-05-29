@@ -38,6 +38,25 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 @synthesize detectsTouchPhases = _detectsTouchPhases;
 @synthesize detectsLongPress = _detectsLongPress;
 
+#pragma mark -
+
+#pragma mark Class Method
+
++ (YIDetectWindow*)detectWindow
+{
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        if ([window isKindOfClass:[YIDetectWindow class]]) {
+            return (YIDetectWindow*)window;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark -
+
+#pragma mark Init/Dealloc
+
 - (void)_setup
 {
     _statusBarWindow = [[UIWindow alloc] init];
