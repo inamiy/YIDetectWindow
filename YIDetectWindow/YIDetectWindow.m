@@ -133,8 +133,6 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
 // override
 - (void)sendEvent:(UIEvent *)event
 {
-    [super sendEvent:event];
-    
     NSSet *touches = [event touchesForWindow:self];
     
     // touchBegan/Ended (for all touches, dispatching separately)
@@ -174,6 +172,8 @@ NSString* const YIDetectWindowTouchViewUserInfoKey = @"YIDetectWindowTouchViewUs
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
         }
     }
+
+    [super sendEvent:event];
 }
 
 - (void)didTouchBegan:(UITouch*)touch
