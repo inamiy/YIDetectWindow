@@ -19,8 +19,10 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveStatusBarTapNotification:) name:YIDetectWindowDidReceiveStatusBarTapNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveShakeNotification:) name:YIDetectWindowDidReceiveShakeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchBeganNotification:) name:YIDetectWindowDidReceiveTouchBeganNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchEndedNotification:) name:YIDetectWindowDidReceiveTouchEndedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchesBeganNotification:) name:YIDetectWindowDidReceiveTouchesBeganNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchesMovedNotification:) name:YIDetectWindowDidReceiveTouchesMovedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchesEndedNotification:) name:YIDetectWindowDidReceiveTouchesEndedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveTouchesCancelledNotification:) name:YIDetectWindowDidReceiveTouchesCancelledNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLongPressNotification:) name:YIDetectWindowDidReceiveLongPressNotification object:nil];
     
     YIDetectWindow* window = [[YIDetectWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -94,29 +96,57 @@
     NSLog(@"shake!");
 }
 
-- (void)didReceiveTouchBeganNotification:(NSNotification*)notification
+- (void)didReceiveTouchesBeganNotification:(NSNotification*)notification
 {
-    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
-    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
-    CGPoint point = [pointValue CGPointValue];
-    
-    NSLog(@"touch began at %@ (%f, %f)!",[view class],point.x,point.y);
+    NSSet* touches = notification.userInfo[YIDetectWindowTouchesUserInfoKey];
+    for (UITouch* touch in touches) {
+        UIView* view = touch.view;
+        CGPoint point = [touch locationInView:touch.view];
+        
+        NSLog(@"touch began at %@ (%f, %f)!",[view class],point.x,point.y);
+    }
 }
 
-- (void)didReceiveTouchEndedNotification:(NSNotification*)notification
+- (void)didReceiveTouchesMovedNotification:(NSNotification*)notification
 {
-    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
-    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
-    CGPoint point = [pointValue CGPointValue];
-    
-    NSLog(@"touch ended at %@ (%f, %f)!",[view class],point.x,point.y);
+    NSSet* touches = notification.userInfo[YIDetectWindowTouchesUserInfoKey];
+    for (UITouch* touch in touches) {
+        UIView* view = touch.view;
+        CGPoint point = [touch locationInView:touch.view];
+        
+        NSLog(@"touch moved at %@ (%f, %f)!",[view class],point.x,point.y);
+    }
+}
+
+- (void)didReceiveTouchesEndedNotification:(NSNotification*)notification
+{
+    NSSet* touches = notification.userInfo[YIDetectWindowTouchesUserInfoKey];
+    for (UITouch* touch in touches) {
+        UIView* view = touch.view;
+        CGPoint point = [touch locationInView:touch.view];
+        
+        NSLog(@"touch ended at %@ (%f, %f)!",[view class],point.x,point.y);
+    }
+}
+
+- (void)didReceiveTouchesCancelledNotification:(NSNotification*)notification
+{
+    NSSet* touches = notification.userInfo[YIDetectWindowTouchesUserInfoKey];
+    for (UITouch* touch in touches) {
+        UIView* view = touch.view;
+        CGPoint point = [touch locationInView:touch.view];
+        
+        NSLog(@"touch cancelled at %@ (%f, %f)!",[view class],point.x,point.y);
+    }
 }
 
 - (void)didReceiveLongPressNotification:(NSNotification*)notification
 {
-    UIView* view = [notification.userInfo objectForKey:YIDetectWindowTouchViewUserInfoKey];
-    NSValue* pointValue = [notification.userInfo objectForKey:YIDetectWindowTouchLocationUserInfoKey];
-    CGPoint point = [pointValue CGPointValue];
+    NSSet* touches = notification.userInfo[YIDetectWindowTouchesUserInfoKey];
+    UITouch* touch = [touches anyObject];
+    
+    UIView* view = touch.view;
+    CGPoint point = [touch locationInView:touch.view];
     
     NSLog(@"long press at %@ (%f, %f)!",[view class],point.x,point.y);
 }

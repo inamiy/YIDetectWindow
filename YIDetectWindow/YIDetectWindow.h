@@ -10,13 +10,13 @@
 
 extern NSString* const YIDetectWindowDidReceiveShakeNotification;
 extern NSString* const YIDetectWindowDidReceiveStatusBarTapNotification;
-extern NSString* const YIDetectWindowDidReceiveTouchBeganNotification;
-extern NSString* const YIDetectWindowDidReceiveTouchEndedNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchesBeganNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchesMovedNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchesEndedNotification;
+extern NSString* const YIDetectWindowDidReceiveTouchesCancelledNotification;
 extern NSString* const YIDetectWindowDidReceiveLongPressNotification;
 
-extern NSString* const YIDetectWindowTouchUserInfoKey;
-extern NSString* const YIDetectWindowTouchLocationUserInfoKey;
-extern NSString* const YIDetectWindowTouchViewUserInfoKey;
+extern NSString* const YIDetectWindowTouchesUserInfoKey;
 
 
 @interface YIDetectWindow : UIWindow
