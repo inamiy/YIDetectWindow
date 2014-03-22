@@ -1,4 +1,4 @@
-YIDetectWindow 1.0.0
+YIDetectWindow 1.0.1
 ====================
 
 A subclass of UIWindow for detecting shake, status-bar-tap, long-press, touchBegan/Moved/Ended/Cancelled, via NSNotification.
