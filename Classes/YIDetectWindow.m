@@ -8,8 +8,6 @@
 
 #import "YIDetectWindow.h"
 
-#define IS_ARC (__has_feature(objc_arc))
-
 #define LONG_PRESS_DELAY    0.5
 #define ALLOWABLE_MOVEMENT  10
 
@@ -76,10 +74,6 @@ NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserIn
     gesture.numberOfTouchesRequired = 1;
     [_statusBarWindow addGestureRecognizer:gesture];
     
-#if !IS_ARC
-    [gesture release];
-#endif
-    
     _detectsShake = NO;
     _detectsStatusBarTap = NO;
     _detectsTouchPhases = NO;
@@ -114,14 +108,6 @@ NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserIn
     }
     return self;
 }
-
-#if !IS_ARC
-- (void)dealloc
-{
-    [_statusBarWindow release];
-    [super dealloc];
-}
-#endif
 
 #pragma mark -
 
