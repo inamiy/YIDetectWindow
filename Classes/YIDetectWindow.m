@@ -24,6 +24,29 @@ NSString* const YIDetectWindowDidReceiveLongPressNotification = @"YIDetectWindow
 NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserInfoKey";
 
 
+@interface YIDetectStatusBarViewController : UIViewController
+@end
+
+
+@implementation YIDetectStatusBarViewController
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    UIViewController* vc = [YIDetectWindow detectWindow].rootViewController;
+
+    while (vc.childViewControllerForStatusBarStyle) {
+        vc = vc.childViewControllerForStatusBarStyle;
+    }
+    
+    return vc.preferredStatusBarStyle;
+}
+
+@end
+
+
+#pragma mark -
+
+
 @interface YIDetectWindow ()
 
 @property (nonatomic, strong)   UIWindow*       statusBarWindow;
@@ -60,15 +83,14 @@ NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserIn
 
 - (void)_setup
 {
+    YIDetectStatusBarViewController* statusBarVC = [[YIDetectStatusBarViewController alloc] init];
+    
     _statusBarWindow = [[UIWindow alloc] init];
-    [_statusBarWindow setBackgroundColor:[UIColor clearColor]]; 
+    _statusBarWindow.rootViewController = statusBarVC;
+    [_statusBarWindow setWindowLevel:UIWindowLevelStatusBar+1];
+    [_statusBarWindow setBackgroundColor:[UIColor clearColor]];
     [_statusBarWindow setFrame:[[UIApplication sharedApplication] statusBarFrame]];
     [_statusBarWindow makeKeyAndVisible];
-    
-    // add delay to safely update UIViewController-based statusBar appearance in iOS7
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [_statusBarWindow setWindowLevel:UIWindowLevelStatusBar+1];
-    });
     
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStatusBarTap:)];
     gesture.numberOfTouchesRequired = 1;
