@@ -8,6 +8,9 @@
 
 #import "YIDetectWindow.h"
 
+#define IS_PORTRAIT             UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)
+#define STATUS_BAR_HEIGHT       (IS_PORTRAIT ? [UIApplication sharedApplication].statusBarFrame.size.height : [UIApplication sharedApplication].statusBarFrame.size.width)
+
 #define LONG_PRESS_DELAY    0.5
 #define ALLOWABLE_MOVEMENT  10
 
@@ -39,6 +42,47 @@ NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserIn
     }
     
     return vc.preferredStatusBarStyle;
+}
+
+@end
+
+
+#pragma mark -
+
+
+@interface YIDetectStatusBarWindow : UIWindow
+@end
+
+
+@implementation YIDetectStatusBarWindow
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.rootViewController = [[YIDetectStatusBarViewController alloc] init];
+    }
+    return self;
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    UIView* rootView = self.rootViewController.view;
+    CGPoint convertedPoint = [self convertPoint:point toView:rootView];
+    
+    // don't detect touches if statusBar is hidden
+    if (self.rootViewController.prefersStatusBarHidden || [UIApplication sharedApplication].statusBarHidden) {
+        return NO;
+    }
+    
+    // detect only if touch is inside statusBarRect
+    CGRect statusBarRect = rootView.bounds;
+    statusBarRect.size.height = STATUS_BAR_HEIGHT;
+    if (CGRectContainsPoint(statusBarRect, convertedPoint)) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end
@@ -83,13 +127,10 @@ NSString* const YIDetectWindowTouchesUserInfoKey = @"YIDetectWindowTouchesUserIn
 
 - (void)_setup
 {
-    YIDetectStatusBarViewController* statusBarVC = [[YIDetectStatusBarViewController alloc] init];
-    
-    _statusBarWindow = [[UIWindow alloc] init];
-    _statusBarWindow.rootViewController = statusBarVC;
-    [_statusBarWindow setWindowLevel:UIWindowLevelStatusBar+1];
-    [_statusBarWindow setBackgroundColor:[UIColor clearColor]];
-    [_statusBarWindow setFrame:[[UIApplication sharedApplication] statusBarFrame]];
+    _statusBarWindow = [[YIDetectStatusBarWindow alloc] init];
+    _statusBarWindow.frame = [UIScreen mainScreen].bounds;
+    _statusBarWindow.windowLevel = UIWindowLevelStatusBar+1;
+    _statusBarWindow.backgroundColor = [UIColor clearColor];
     [_statusBarWindow makeKeyAndVisible];
     
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleStatusBarTap:)];
